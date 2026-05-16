@@ -1,0 +1,23 @@
+[user]
+	name = David Skynar
+	email = david.skynar@gmail.com
+[alias]
+    # Basic commands
+    st = status
+    cm = commit -m
+    ca = commit --amend
+    br = branch
+    co = checkout
+    df = diff
+    
+    # Logging (The "Pretty" Log)
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    
+    # Branching & Pulling
+    ps = push
+    pl = pull
+    last = log -1 HEAD
+    
+    # Cleanup
+    unstage = reset HEAD --
+	show-aliases = !git config --get-regexp alias
