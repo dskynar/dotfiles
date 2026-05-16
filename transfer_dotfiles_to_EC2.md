@@ -40,7 +40,11 @@ Log into your remote server to finalize the configuration:
 ssh -i /path/to/your-key.pem ubuntu@YOUR_EC2_PUBLIC_IP
 
 ```
+check the diff between them:
+```bash
+sdiff -s ~/dotfiles/.bashrc ~/.bashrc
 
+```
 ### Step 4: Back Up and Symlink on the EC2 Instance
 
 Once inside the EC2 instance terminal, execute your backup and linking routine exactly like a normal Linux laptop setup, see [README.md](https://github.com/dskynar/dotfiles/blob/main/README.md)
