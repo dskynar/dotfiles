@@ -26,6 +26,11 @@ Replace `ubuntu` with the default username of your EC2 operating system image if
 scp -i /path/to/your-key.pem -r ~/dotfiles ubuntu@YOUR_EC2_PUBLIC_IP:~/dotfiles
 
 ```
+or better
+```bash
+rsync -avz -e "ssh -i /path/to/your-key.pem" --exclude='.git' ~/dotfiles/ ubuntu@YOUR_EC2_PUBLIC_IP:~/dotfiles
+
+```
 
 ### Step 3: SSH into your EC2 Instance
 
