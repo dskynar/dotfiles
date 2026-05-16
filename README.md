@@ -39,6 +39,14 @@ rm ~/.gitconfig && ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
 rm ~/.gitignore && ln -s ~/dotfiles/git/.gitignore ~/.gitignore
 
 ```
+or simply:
+```bash
+ln -s ~/dotfiles/bash/.bashrc ~/.bashrc
+ln -s ~/dotfiles/vim/.vimrc ~/.vimrc
+ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
+ln -s ~/dotfiles/git/.gitignore ~/.gitignore
+
+```
 
 ### 4. Verify the Links are Working
 
