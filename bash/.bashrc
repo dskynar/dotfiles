@@ -106,5 +106,12 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
     export AWS_PROFILE="AdministratorAccess-101260246565"
+    # Linux Homebrew & AWS Profile Environment (Only runs if Homebrew is installed, uncoment to adjust on EC2)
+    #if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+    #  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    #  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+    #fi
+    #export AWS_PROFILE="AdministratorAccess-101260246565"
+
 
 fi
