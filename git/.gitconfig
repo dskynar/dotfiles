@@ -21,3 +21,5 @@
     # Cleanup
     unstage = reset HEAD --
 	show-aliases = !git config --get-regexp alias
+[core]
+  excludesfile = ~/.gitignore
