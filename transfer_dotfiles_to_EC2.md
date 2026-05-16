@@ -1,11 +1,4 @@
-Deploying your dotfiles to a remote AWS EC2 instance over SSH is a great way to make a cloud server instantly feel like home. Because an EC2 instance is completely fresh, you can use `scp` (Secure Copy Protocol) to copy your files over, and then establish your symlinks.
-
-Here is the markdown documentation explaining exactly how to do this. You can add this directly to your `README.md` file or save it as a separate guide.
-
----
-
-```markdown
-## ☁️ Deploying Dotfiles to an AWS EC2 Instance via SSH
+# ☁️ Deploying Dotfiles to an AWS EC2 Instance via SSH
 
 Follow these instructions to securely copy your dotfiles from your local machine to a remote AWS EC2 instance and activate your environment.
 
@@ -45,7 +38,7 @@ ssh -i /path/to/your-key.pem ubuntu@YOUR_EC2_PUBLIC_IP
 
 ### Step 4: Back Up and Symlink on the EC2 Instance
 
-Once inside the EC2 instance terminal, execute your backup and linking routine exactly like a normal Linux laptop setup, see README.md [README.md](https://)
+Once inside the EC2 instance terminal, execute your backup and linking routine exactly like a normal Linux laptop setup, see [README.md](https://github.com/dskynar/dotfiles/blob/main/README.md)
 
 
 This covers both bases—pushing files physically from your computer via `scp`, or pulling them down via Git once you are connected to the cloud server!
