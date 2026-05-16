@@ -11,7 +11,7 @@ terraform {
 
 # 1. Configure the AWS Provider (Change region if needed)
 provider "aws" {
-  region = "us-east-1" 
+  region = "eu-central-1" 
 }
 
 # 2. Automatically look up the latest Ubuntu Free-Tier AMI
