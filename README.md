@@ -126,7 +126,7 @@ Tmux maintains terminal state across SSH disconnects and allows split terminal p
 * **Switch Panes:** `Ctrl+b` then `Arrow Keys`
 * **Toggle Pane Fullscreen:** `Ctrl+b` then `z`
 * **Copy Mode (Scroll history):** `Ctrl+b` then `[` (Use `q` to exit)
-
+* **More Commands:  [https://tmuxcheatsheet.com](tmuxcheatsheet) 
 ---
 
 ## 🛠️ Modifying & Syncing Changes
