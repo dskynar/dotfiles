@@ -103,7 +103,7 @@ If you want to run specific git commands (like checking a diff or status) withou
 ```bash
 dotgit status
 dotgit diff
-
+dotst, dotpull, dotedit, dotpush, dotcd, back
 ```
 
 ---
