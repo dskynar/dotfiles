@@ -1,81 +1,105 @@
 # 💻 Dotfiles Startup Kit
 
-A unified environment setup for managing configurations smoothly across both **macOS** and **Linux (Ubuntu)**. 
+A unified environment setup for managing configurations smoothly across **macOS**, **Linux (Ubuntu)**, and **AWS EC2 instances**. 
 
-This repository centralizes configuration files like `.bashrc` and `.vimrc` in one place using Git, then relies on symbolic links (symlinks) to hook them into the user's home (`~/`) directory.
+This repository centralizes configuration files (`.bashrc`, `.vimrc`, `.tmux.conf`, `.gitconfig`) in one place using Git, relying on symbolic links (symlinks) to hook them into your home (`~/`) directory.
 
 ---
 
 ## 🚀 First-Time Setup on a New Machine
 
-When setting up a brand-new laptop or dropping into a fresh machine, follow these steps to instantly deploy your environment.
+When setting up a brand-new laptop or dropping into a fresh EC2 instance, follow these steps to deploy your environment.
 
-### 1. Switch default shell to Bash and clone the Repository
-Clone this repository directly into your home folder:
+### 1. Install Prerequisites & Set Default Shell
 
+On macOS, switch your shell to Bash:
 ```bash
 chsh -s /bin/bash
-git clone git@github-personal:dskynar/dotfiles.git
-```
-
-### 2. Back Up Existing Configs (Recommended)
-
-Before touching your active environment, use `cp` to create an exact copy of the working files right inside your home directory for safety. This leaves your original files untouched while you configure the shortcuts:
-
-```bash
-cp ~/.bashrc ~/.bashrc.orig
-cp ~/.vimrc ~/.vimrc.orig
 
 ```
 
-### 3. Create the Symbolic Links
-
-To apply your configurations, use `rm` to clear out the default files, followed immediately by `ln -s` to create a permanent filesystem shortcut link pointing to your repository folder:
+Ensure **`tmux`** and **`vim`** are installed:
 
 ```bash
-rm -f ~/.bashrc && ln -s ~/Projects/Personal/dotfiles/bash/.bashrc ~/.bashrc
-rm -f ~/.vimrc && ln -s ~/Projects/Personal/dotfiles/vim/.vimrc ~/.vimrc
-rm -f ~/.gitconfig && ln -s ~/Projects/Personal/dotfiles/git/.gitconfig ~/.gitconfig
-rm -f ~/.gitignore && ln -s ~/Projects/Personal/dotfiles/git/.gitignore ~/.gitignore
+# On macOS (via Homebrew)
+brew install tmux vim
+
+# On Ubuntu / Debian / EC2
+sudo apt update && sudo apt install tmux vim -y
+
 ```
-or simply:
+
+### 2. Clone the Repository
+
+Clone the repo into your personal projects folder:
+
 ```bash
+git clone git@github-personal:dskynar/dotfiles.git ~/Projects/Personal/dotfiles
+
+```
+
+### 3. Back Up Existing Configs (Recommended)
+
+Create copies of active environment files for safety before linking:
+
+```bash
+cp ~/.bashrc ~/.bashrc.orig 2>/dev/null || true
+cp ~/.vimrc ~/.vimrc.orig 2>/dev/null || true
+cp ~/.tmux.conf ~/.tmux.conf.orig 2>/dev/null || true
+
+```
+
+### 4. Create the Symbolic Links
+
+Ensure target directories exist, then create symlinks forcing overwrites:
+
+```bash
+# Create target config folder for modern Tmux
+mkdir -p ~/.config/tmux
+
+# Apply symbolic links
 ln -sf ~/Projects/Personal/dotfiles/bash/.bashrc ~/.bashrc
 ln -sf ~/Projects/Personal/dotfiles/vim/.vimrc ~/.vimrc
 ln -sf ~/Projects/Personal/dotfiles/git/.gitconfig ~/.gitconfig
 ln -sf ~/Projects/Personal/dotfiles/git/.gitignore ~/.gitignore
+ln -sf ~/Projects/Personal/dotfiles/tmux/.config/tmux/tmux.conf ~/.config/tmux/tmux.conf
+
 ```
 
-### 4. Verify the Links are Working
+### 5. Configure macOS & Linux Login Shells (`.bash_profile`)
 
-To double-check that the filesystem bridge was successfully built, run:
+macOS Terminal runs every new tab as a *login shell* (looking for `~/.bash_profile`), while Ubuntu uses `~/.profile`.
+
+Create a unified `~/.bash_profile` to handle both environments cleanly:
 
 ```bash
-ls -la ~ | grep -E '\.(bashrc|vimrc)'
+cat << 'EOF' > ~/.bash_profile
+# Hide macOS Zsh deprecation warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# Load Ubuntu system defaults if present
+if [ -f ~/.profile ]; then
+    . ~/.profile
+fi
+
+# Load shared dotfiles configuration
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+EOF
 
 ```
 
-You should see output paths showing little arrows pointing back to your repository folder, like this:
+### 6. Verify and Activate Environment
 
-```text
-~/.bashrc -> /Users/YOUR_USER/dotfiles/.bashrc
-
-```
-
-### 5. Special Configuration for Modern Macs (Zsh Bridge)
-
-Modern Macs use Zsh by default instead of Bash, meaning macOS looks for a `~/.zshrc` file upon startup instead of `.bashrc`.
-
-To bridge your unified configuration to a Mac, create a standard `~/.zshrc` file (if it doesn't exist) and add this single line to the bottom of it to execute your shared repository file:
+Verify that all symlinks point to the target path:
 
 ```bash
-source ~/dotfiles/.bashrc
+ls -la ~ | grep '\->'
 
 ```
 
-### 6. Activate the Environment
-
-Reload your current shell session to pull in all your updated configurations, aliases, and functions without restarting the terminal:
+Activate the environment in your current terminal:
 
 ```bash
 source ~/.bashrc
@@ -84,76 +108,82 @@ source ~/.bashrc
 
 ---
 
+## 🖥️ Tmux Integration & Cheat Sheet
+
+Tmux maintains terminal state across SSH disconnects and allows split terminal panes.
+
+### Starting and Attaching
+
+* **Start a named session:** `tmux new -s work`
+* **Detach from session:** Press `Ctrl+b`, then `d`
+* **List active sessions:** `tmux ls`
+* **Re-attach to session (e.g., after SSH drop):** `tmux attach -t work`
+
+### Essential Keybindings (Default Prefix: `Ctrl+b`)
+
+* **Horizontal Split:** `Ctrl+b` then `"`
+* **Vertical Split:** `Ctrl+b` then `%`
+* **Switch Panes:** `Ctrl+b` then `Arrow Keys`
+* **Toggle Pane Fullscreen:** `Ctrl+b` then `z`
+* **Copy Mode (Scroll history):** `Ctrl+b` then `[` (Use `q` to exit)
+
+---
+
 ## 🛠️ Modifying & Syncing Changes
 
-You don't need to change directories to update your repository. Because your files are permanently symlinked, editing `~/.bashrc` or `~/.vimrc` updates the files inside your repository instantly.
+You don't need to navigate away from your working directories to update your dotfiles. Custom commands in `.bashrc` handle navigation and repository operations globally:
 
-This repository includes custom git shortcuts configured inside the `.bashrc`. To back up and push your changes to GitHub from anywhere in your terminal, simply run:
+### Navigation & Helper Aliases
+
+* **`dotcd`**: Jump directly to `~/Projects/Personal/dotfiles`
+* **`back`**: Return to your previous working directory (`cd -`)
+* **`dotedit <file>`**: Opens a specific dotfile in Vim and returns you to your current working directory upon exiting.
+
+### Remote Synchronization
+
+To pull updates, stage changes, commit, and push in a single safe workflow (including autostashing local changes), run:
 
 ```bash
-dotpush
+dotpush "Optional commit message"
 
 ```
 
-### Manual Repository Control
-
-If you want to run specific git commands (like checking a diff or status) without leaving your current working folder, use the `dotgit` shortcut:
+To run individual Git operations on the repository without leaving your current folder:
 
 ```bash
-dotgit status
-dotgit diff
-dotst, dotpull, dotedit, dotpush, dotcd, back
+dotst     # Runs git status
+dotpull   # Runs git pull --rebase --autostash
+dotgit    # Alias for running custom git operations (e.g., dotgit diff)
+
 ```
 
 ---
 
-## 🆘 Troubleshooting & OS Dependencies
+## 🆘 Troubleshooting
+
+### 📋 Remote Clipboard Copying inside Tmux
+
+If yanked text inside `tmux` or Vim over SSH does not paste into your laptop's clipboard, verify that `set -s set-clipboard on` is present in `~/.config/tmux/tmux.conf`, and ensure your terminal emulator supports **OSC 52** clipboard passthrough.
 
 ### 🐧 Missing Vim Syntax Highlighting on Ubuntu
 
-Fresh installations of Ubuntu use a stripped-down package (`vim-tiny`) by default which does not support advanced features like `syntax on`, color templates, or code indentation rules.
-
-If your terminal complains about `syntax on`, upgrade to full Vim by running:
+Ubuntu ships with `vim-tiny` by default. Upgrade to full Vim to resolve syntax errors:
 
 ```bash
 sudo apt update && sudo apt install vim -y
 
 ```
 
-### 🔄 Emergency Restore to Factory Defaults
+### 🔄 Emergency Restore to Defaults
 
-If you ever need to break the repository symlinks and completely restore your machine back to its original operating system default state, run the following commands:
-
-#### Option A: Restore from your local `.orig` backups
+To restore original operating system configuration files:
 
 ```bash
-rm ~/.bashrc ~/.vimrc
-mv ~/.bashrc.orig ~/.bashrc
-mv ~/.vimrc.orig ~/.vimrc
-
-```
-
-#### Option B: Regenerate fresh from system skeleton templates
-
-**On Ubuntu (Linux):**
-
-```bash
-rm ~/.bashrc ~/.vimrc
-cp /etc/skel/.bashrc ~/.bashrc
-cp /usr/share/vim/vim*/vimrc ~/.vimrc
-
-```
-
-**On macOS:**
-
-```bash
-rm ~/.bashrc ~/.vimrc
-cp /etc/bashrc ~/.bashrc
-cp /usr/share/vim/vimrc ~/.vimrc
+rm ~/.bashrc ~/.vimrc ~/.tmux.conf ~/.bash_profile
+cp /etc/skel/.bashrc ~/.bashrc 2>/dev/null || cp /etc/bashrc ~/.bashrc
 
 ```
 
 ```
 
 ```
-
