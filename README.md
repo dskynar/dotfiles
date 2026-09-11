@@ -15,8 +15,7 @@ Clone this repository directly into your home folder:
 
 ```bash
 chsh -s /bin/bash
-git clone [https://github.com/YOUR_GITHUB_USERNAME/dotfiles.git](https://github.com/YOUR_GITHUB_USERNAME/dotfiles.git) ~/dotfiles
-
+git clone git@github-personal:dskynar/dotfiles.git
 ```
 
 ### 2. Back Up Existing Configs (Recommended)
