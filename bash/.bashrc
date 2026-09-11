@@ -24,6 +24,12 @@ export LANGUAGE="en_US:en"
 # Core bare/work-tree mapping for dotfiles
 alias dotgit="git --git-dir=$HOME/Projects/Personal/dotfiles/.git --work-tree=$HOME/Projects/Personal/dotfiles"
 
+# Jump to dotfiles directory
+alias dotcd="cd $HOME/Projects/Personal/dotfiles"
+
+# Quick return to previous directory
+alias back="cd -
+"
 # Status check
 alias dotst="dotgit status"
 
