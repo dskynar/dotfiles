@@ -34,19 +34,17 @@ cp ~/.vimrc ~/.vimrc.orig
 To apply your configurations, use `rm` to clear out the default files, followed immediately by `ln -s` to create a permanent filesystem shortcut link pointing to your repository folder:
 
 ```bash
-rm ~/.bashrc && ln -s ~/dotfiles/bash/.bashrc ~/.bashrc
-rm ~/.vimrc && ln -s ~/dotfiles/vim/.vimrc ~/.vimrc
-rm ~/.gitconfig && ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
-rm ~/.gitignore && ln -s ~/dotfiles/git/.gitignore ~/.gitignore
-
+rm -f ~/.bashrc && ln -s ~/Projects/Personal/dotfiles/bash/.bashrc ~/.bashrc
+rm -f ~/.vimrc && ln -s ~/Projects/Personal/dotfiles/vim/.vimrc ~/.vimrc
+rm -f ~/.gitconfig && ln -s ~/Projects/Personal/dotfiles/git/.gitconfig ~/.gitconfig
+rm -f ~/.gitignore && ln -s ~/Projects/Personal/dotfiles/git/.gitignore ~/.gitignore
 ```
 or simply:
 ```bash
-ln -s ~/dotfiles/bash/.bashrc ~/.bashrc
-ln -s ~/dotfiles/vim/.vimrc ~/.vimrc
-ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
-ln -s ~/dotfiles/git/.gitignore ~/.gitignore
-
+ln -sf ~/Projects/Personal/dotfiles/bash/.bashrc ~/.bashrc
+ln -sf ~/Projects/Personal/dotfiles/vim/.vimrc ~/.vimrc
+ln -sf ~/Projects/Personal/dotfiles/git/.gitconfig ~/.gitconfig
+ln -sf ~/Projects/Personal/dotfiles/git/.gitignore ~/.gitignore
 ```
 
 ### 4. Verify the Links are Working
