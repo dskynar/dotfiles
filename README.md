@@ -178,12 +178,27 @@ sudo apt update && sudo apt install vim -y
 
 To restore original operating system configuration files:
 
+# 1. Remove all active symlinks
+
 ```bash
-rm ~/.bashrc ~/.vimrc ~/.tmux.conf ~/.bash_profile
+rm -f ~/.bashrc ~/.vimrc ~/.tmux.conf ~/.bash_profile
+
+```
+# 2. Restore .bashrc from Ubuntu skeleton or macOS template
+
+```bash
 cp /etc/skel/.bashrc ~/.bashrc 2>/dev/null || cp /etc/bashrc ~/.bashrc
 
 ```
+# 3. Restore .vimrc from system templates
+
+```bash
+cp /usr/share/vim/vim*/vimrc ~/.vimrc 2>/dev/null || cp /usr/share/vim/vimrc ~/.vimrc
 
 ```
+# 4. Generate clean, empty placeholder files for .tmux.conf and .bash_profile
 
+```bash
+touch ~/.tmux.conf ~/.bash_profile
 ```
+
