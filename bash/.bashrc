@@ -50,6 +50,16 @@ dotpush() {
     echo "--> Pushing to personal GitHub..."
     dotgit push
 }
+# Edit a dotfile and automatically return to original directory
+dotedit() {
+    pushd $HOME/Projects/Personal/dotfiles > /dev/null || return
+    if [ -z "$1" ]; then
+        vim .
+    else
+        vim "$1"
+    fi
+    popd > /dev/null || return
+}
 # ==============================================================================
 # MACOS SPECIFIC SETTINGS
 # ==============================================================================
