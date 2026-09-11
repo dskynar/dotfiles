@@ -10,10 +10,11 @@ This repository centralizes configuration files like `.bashrc` and `.vimrc` in o
 
 When setting up a brand-new laptop or dropping into a fresh machine, follow these steps to instantly deploy your environment.
 
-### 1. Clone the Repository
+### 1. Switch default shell to Bash and clone the Repository
 Clone this repository directly into your home folder:
 
 ```bash
+chsh -s /bin/bash
 git clone [https://github.com/YOUR_GITHUB_USERNAME/dotfiles.git](https://github.com/YOUR_GITHUB_USERNAME/dotfiles.git) ~/dotfiles
 
 ```
