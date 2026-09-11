@@ -21,10 +21,35 @@ export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
 
 # Dotfiles Git Management Shortcuts
-alias dotgit="git --git-dir=$HOME/dotfiles/.git --work-tree=$HOME/dotfiles"
-alias dotpush="dotgit add -A && dotgit commit -m 'Update dotfiles' && dotgit push"
+# Core bare/work-tree mapping for dotfiles
+alias dotgit="git --git-dir=$HOME/Projects/Personal/dotfiles/.git --work-tree=$HOME/Projects/Personal/dotfiles"
 
+# Status check
+alias dotst="dotgit status"
 
+# Safe Pull (Rebase + Autostash untracked files)
+alias dotpull="dotgit pull --rebase --autostash origin main"
+
+# Safe Push Function
+dotpush() {
+    local msg="${1:-Update dotfiles}"
+
+    echo "--> Checking remote updates..."
+    dotgit pull --rebase --autostash origin main || { echo "Pull failed. Fix conflicts first."; return 1; }
+
+    echo "--> Staging changes..."
+    dotgit add -A
+
+    if dotgit diff-index --quiet HEAD --; then
+        echo "--> No changes to commit."
+    else
+        echo "--> Committing changes: '$msg'"
+        dotgit commit -m "$msg"
+    fi
+
+    echo "--> Pushing to personal GitHub..."
+    dotgit push
+}
 # ==============================================================================
 # MACOS SPECIFIC SETTINGS
 # ==============================================================================
