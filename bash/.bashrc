@@ -66,6 +66,51 @@ dotedit() {
     fi
     popd > /dev/null || return
 }
+
+#Obsidian Vault Git Management Shortcuts
+# Core bare/work-tree mapping for Obsidian Vault
+alias gengit="git --git-dir=$HOME/Projects/Personal/My_Unified_Vault/.git --work-tree=$HOME/Projects/Personal/My_Unified_Vault"
+
+# Jump to Obsidian Vault directory
+alias gencd="cd $HOME/Projects/Personal/My_Unified_Vault"
+
+# Status check
+alias genst="gengit status"
+
+# Safe Pull (Rebase + Autostash untracked files)
+alias genpull="gengit pull --rebase --autostash origin main"
+
+# Safe Push Function
+genpush() {
+    local msg="${1:-Update vault}"
+
+    echo "--> Checking remote updates..."
+    gengit pull --rebase --autostash origin main || { echo "Pull failed. Fix conflicts first."; return 1; }
+
+    echo "--> Staging changes..."
+    gengit add -A
+
+    if gengit diff-index --quiet HEAD --; then
+        echo "--> No changes to commit."
+    else
+        echo "--> Committing changes: '$msg'"
+        gengit commit -m "$msg"
+    fi
+
+    echo "--> Pushing to personal GitHub..."
+    gengit push
+}
+
+# Edit an Obsidian note and automatically return to original directory
+genedit() {
+    pushd $HOME/Projects/Personal/My_Unified_Vault > /dev/null || return
+    if [ -z "$1" ]; then
+        vim .
+    else
+        vim "$1"
+    fi
+    popd > /dev/null || return
+}
 # ==============================================================================
 # MACOS SPECIFIC SETTINGS
 # ==============================================================================
