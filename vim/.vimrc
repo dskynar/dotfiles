@@ -12,6 +12,7 @@ filetype indent on              " Enable indentation (Mac)
 set autoindent                  " Copy indent from current line when starting a new one (both)
 set smarttab                    " Make Tab key smarter at the start of a line (Linux)
 set backspace=indent,eol,start  " Set backspace so it acts more intuitively (both)
+set pastetoggle=<F10>           " Enable paste your text with Cmd + V, and press F10 again to turn it off
 
 " --- Global Indentation Defaults (2 Spaces) ---
 set tabstop=2                   " Number of visual spaces per TAB (both)
