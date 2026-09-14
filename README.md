@@ -132,7 +132,7 @@ Tmux maintains terminal state across SSH disconnects and allows split terminal p
 ## 🛠️ Modifying & Syncing Changes
 
 You don't need to navigate away from your working directories to update your dotfiles. Custom commands in `.bashrc` handle navigation and repository operations globally:
-
+The same is valid for the Obsidian repository by replacing **dot** prefix for all aliases with **gen**.
 ### Navigation & Helper Aliases
 
 * **`dotcd`**: Jump directly to `~/Projects/Personal/dotfiles`
