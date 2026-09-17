@@ -46,6 +46,7 @@ Create copies of active environment files for safety before linking:
 cp ~/.bashrc ~/.bashrc.orig 2>/dev/null || true
 cp ~/.vimrc ~/.vimrc.orig 2>/dev/null || true
 cp ~/.tmux.conf ~/.tmux.conf.orig 2>/dev/null || true
+cp ~/.local/bin/env ~/.local/bin/env.orig 2>/dev/null || true
 
 ```
 
