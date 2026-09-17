@@ -20,7 +20,25 @@ alias l='ls -CF'
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
 
-# Dotfiles Git Management Shortcuts
+# Git Management Shortcuts
+# For git difftool with vimdiff tool
+
+# Compare working directory against the last commit
+alias gd='git difftool'
+
+# Compare staged (indexed) changes against HEAD
+alias gds='git difftool --staged'
+
+# Compare working directory against the commit prior to HEAD (HEAD~1)
+alias gdp='git difftool HEAD~1'
+
+# Open ALL modified files at once in a directory-tree diff
+alias gdd='git difftool --dir-diff'
+
+# Compare changes between two branches (e.g., gdb main feature-branch)
+alias gdb='git difftool'
+
+
 # Core bare/work-tree mapping for dotfiles
 alias dotgit="git --git-dir=$HOME/Projects/Personal/dotfiles/.git --work-tree=$HOME/Projects/Personal/dotfiles"
 
