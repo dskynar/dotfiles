@@ -28,13 +28,15 @@
 
 ```text
 ~/Projects/Personal/My_Unified_Vault/
-├── .git/                       # Embedded Git repository
-├── 00-System/                  # Templates, asset attachments, internal scripts
-├── 10-Inbox/                   # Unprocessed ideas and raw notes
-├── 20-Notes/                   # Atomic Zettelkasten knowledge base
-└── 30-Publish/                 # Public-facing Markdown articles mirrored to Quartz
-    └── index.md                # Homepage for your blog
-
+├── .obsidian                   # Obsidian config files
+├── .gitignore                  # Embedded Git repository
+├── 1_Inbox/                    # Templates, asset attachments, internal scripts
+├── 2_Input/                    # Unprocessed ideas and raw notes
+├── 3_Journal/                  # Atomic Zettelkasten knowledge base
+├── 4_Output/                   # Output of 
+├── 5_Zettelkasten/             # Atomic Zettelkasten knowledge base
+├── 6_Publish/                  # Public-facing Markdown articles mirrored to Quartz
+    └── index.md                # Homepage for your blog 
 ```
 
 ---
