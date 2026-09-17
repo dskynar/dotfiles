@@ -23,3 +23,11 @@
 	show-aliases = !git config --get-regexp alias
 [core]
   excludesfile = ~/.gitignore
+[diff]
+    tool = vimdiff
+
+[difftool]
+    prompt = false
+
+[difftool "vimdiff"]
+    cmd = code --wait --diff "$LOCAL" "$REMOTE"
