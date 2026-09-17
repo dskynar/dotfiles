@@ -219,3 +219,4 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
 
 fi
+. "$HOME/.local/bin/env"
