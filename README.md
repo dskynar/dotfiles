@@ -1,6 +1,6 @@
 # 💻 Dotfiles Startup Kit
 
-A unified environment setup for managing configurations smoothly across **macOS**, **Linux (Ubuntu)**, and **AWS EC2 instances**. 
+AA unified environment setup for managing configurations smoothly across **macOS**, **Linux (Ubuntu)**, and **AWS EC2 instances**. 
 
 This repository centralizes configuration files (`.bashrc`, `.vimrc`, `.tmux.conf`, `.gitconfig`) in one place using Git, relying on symbolic links (symlinks) to hook them into your home (`~/`) directory.
 

@@ -29,5 +29,3 @@
 [difftool]
     prompt = false
 
-[difftool "vimdiff"]
-    cmd = code --wait --diff "$LOCAL" "$REMOTE"
