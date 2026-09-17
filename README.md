@@ -57,12 +57,17 @@ Ensure target directories exist, then create symlinks forcing overwrites:
 # Create target config folder for modern Tmux
 mkdir -p ~/.config/tmux
 
+# Create target /.local/bin folder if it doesn't exist
+mkdir -p ~/.local/bin
+
+
 # Apply symbolic links
 ln -sf ~/Projects/Personal/dotfiles/bash/.bashrc ~/.bashrc
 ln -sf ~/Projects/Personal/dotfiles/vim/.vimrc ~/.vimrc
 ln -sf ~/Projects/Personal/dotfiles/git/.gitconfig ~/.gitconfig
 ln -sf ~/Projects/Personal/dotfiles/git/.gitignore ~/.gitignore
 ln -sf ~/Projects/Personal/dotfiles/tmux/.config/tmux/tmux.conf ~/.config/tmux/tmux.conf
+ln -sf ~/Projects/Personal/dotfiles/bash/local_bin_env ~/.local/bin/env
 
 ```
 
