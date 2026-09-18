@@ -131,10 +131,10 @@ genedit() {
 # Core bare/work-tree mapping for Obsidian Vault
 # Core bare/work-tree mapping for the private part of my Obsidian Vault. 
 # To used on personal laptop only. 
-alias prigit="git --git-dir=$HOME/Projects/Personal/My_Unified_Vault/.git --work-tree=$HOME/Projects/Personal/My_Unified_Vault"
+alias prigit="git --git-dir=$HOME/Projects/Personal/Private_Notes/.git --work-tree=$HOME/Projects/Personal/Private_Notes"
 
 # Jump to Obsidian Vault directory
-alias pricd="cd $HOME/Projects/Personal/My_Unified_Vault"
+alias pricd="cd $HOME/Projects/Personal/Private_Notes"
 
 # Status check
 alias prist="prigit status"
