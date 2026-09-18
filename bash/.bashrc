@@ -85,8 +85,7 @@ dotedit() {
     popd > /dev/null || return
 }
 
-#Obsidian Vault Git Management Shortcuts
-# Core bare/work-tree mapping for Obsidian Vault
+# Core bare/work-tree mapping for the general part of my Obsidian Vault
 alias gengit="git --git-dir=$HOME/Projects/Personal/My_Unified_Vault/.git --work-tree=$HOME/Projects/Personal/My_Unified_Vault"
 
 # Jump to Obsidian Vault directory
@@ -121,6 +120,51 @@ genpush() {
 
 # Edit an Obsidian note and automatically return to original directory
 genedit() {
+    pushd $HOME/Projects/Personal/My_Unified_Vault > /dev/null || return
+    if [ -z "$1" ]; then
+        vim .
+    else
+        vim "$1"
+    fi
+    popd > /dev/null || return
+}
+# Core bare/work-tree mapping for Obsidian Vault
+# Core bare/work-tree mapping for the private part of my Obsidian Vault. 
+# To used on personal laptop only. 
+alias prigit="git --git-dir=$HOME/Projects/Personal/My_Unified_Vault/.git --work-tree=$HOME/Projects/Personal/My_Unified_Vault"
+
+# Jump to Obsidian Vault directory
+alias pricd="cd $HOME/Projects/Personal/My_Unified_Vault"
+
+# Status check
+alias prist="prigit status"
+
+# Safe Pull (Rebase + Autostash untracked files)
+alias pripull="prigit pull --rebase --autostash origin main"
+
+# Safe Push Function
+pripush() {
+    local msg="${1:-Update vault}"
+
+    echo "--> Checking remote updates..."
+    prigit pull --rebase --autostash origin main || { echo "Pull failed. Fix conflicts first."; return 1; }
+
+    echo "--> Staging changes..."
+    prigit add -A
+
+    if prigit diff-index --quiet HEAD --; then
+        echo "--> No changes to commit."
+    else
+        echo "--> Committing changes: '$msg'"
+        prigit commit -m "$msg"
+    fi
+
+    echo "--> Pushing to personal GitHub..."
+    prigit push
+}
+
+# Edit an Obsidian note and automatically return to original directory
+priedit() {
     pushd $HOME/Projects/Personal/My_Unified_Vault > /dev/null || return
     if [ -z "$1" ]; then
         vim .
