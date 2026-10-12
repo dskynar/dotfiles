@@ -123,6 +123,7 @@ Run once per physical machine to generate unique, secure Ed25519 identity keys f
 # --- Personal AWS Key ---
 # On Mac:
 ssh-keygen -t ed25519 -C "macbook-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
+ssh-keygen -t ed25519 -C "macbook-cloudera-aws" -f ~/.ssh/id_ed25519_aws_work
 
 # On Ubuntu:
 ssh-keygen -t ed25519 -C "ubuntu-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
@@ -175,6 +176,36 @@ Print the public keys and copy/paste them into the corresponding GitHub web inte
    ```bash
    ssh -T git@github.infra.cloudera.com
    ```
+### 4. Configure Local SSH Host Mappings (`~/.ssh/config`)
+Add the following configuration to `~/.ssh/config` to automate key selection and host alias mapping:
+
+```ssh
+# Personal GitHub account
+Host github-personal
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_personal
+  IdentitiesOnly yes
+
+# Work GitHub account
+Host github-work
+  HostName github.infra.cloudera.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_work
+  IdentitiesOnly yes
+
+# Connect to EC2 instances (Cloudera Sandbox)
+Host sky-hol*
+  User ec2-user
+  IdentityFile ~/.ssh/dskynar-sandbox-eu-west-xxxx.pem
+  IdentitiesOnly yes
+
+# Connect to EC2 instances (Cloudera EMEA Marketing)
+Host sky-hol*
+  User ec2-user
+  IdentityFile ~/.ssh/sky-hol-aws-key-pair-marketing-emea1-xxx.pem
+  IdentitiesOnly yes
+
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
