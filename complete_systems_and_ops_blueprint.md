@@ -205,7 +205,7 @@ Host sky-hol*
   User ec2-user
   IdentityFile ~/.ssh/sky-hol-aws-key-pair-marketing-emea1-xxx.pem
   IdentitiesOnly yes
-
+```
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
@@ -340,9 +340,9 @@ Host personal-ec2
   IdentitiesOnly yes
 
 # Cloudera EC2 Instance
-Host pla-hol*
+Host sky-hol*
   User ec2-user
-  IdentityFile ~/.ssh/dskynar-sandbox-eu-west-1-may9-v2.pem
+  IdentityFile ~/.ssh/dskynar-sandbox-eu-west-xxx.pem
   ForwardAgent yes
   IdentitiesOnly yes
 
