@@ -133,8 +133,9 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ```
 Run once per physical machine to generate unique, secure Ed25519 identity keys for AWS and GitHub access:
-# --- Personal AWS Key ---
+
 ```bash
+# --- Personal AWS Key ---
 # On Mac:
 ssh-keygen -t ed25519 -C "macbook-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
 ssh-keygen -t ed25519 -C "macbook-cloudera-aws" -f ~/.ssh/id_ed25519_aws_work
@@ -209,13 +210,13 @@ Host github-work
   IdentitiesOnly yes
 
 # Connect to EC2 instances (Cloudera Sandbox)
-Host sky-hol*
+Host sand-hol*
   User ec2-user
   IdentityFile ~/.ssh/dskynar-sandbox-eu-west-xxxx.pem
   IdentitiesOnly yes
 
 # Connect to EC2 instances (Cloudera EMEA Marketing)
-Host sky-hol*
+Host mark-hol*
   User ec2-user
   IdentityFile ~/.ssh/sky-hol-aws-key-pair-marketing-emea1-xxx.pem
   IdentitiesOnly yes
