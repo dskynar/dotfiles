@@ -115,23 +115,104 @@ genedit() {
 
 ## 🔐 Step 2: Machine Key Pairs - AWS & Github Setup
 
-### 1. Initial setup and Local Machine Key Generation
+### 1. Prerequisites & Base System Setup
+
+Install base developer utilities and create required configuration directories:
 
 ```bash
-# --- Install git, ssh, brew, AWS CLI v2 etc ****
+# --- Install Xcode Command Line Tools, Homebrew, and AWS CLI v2 ---
 xcode-select --install
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh](https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh))"
 brew install awscli
 aws --version
 
-# --- log into your AWS SSO session and verify---
-aws sso login --profile AdministratorAccess-xxxxxx
-aws sts get-caller-identity --profile AdministratorAccess-xxxxxx
-# --- Create ssh directory ---
+# --- Create required configuration directories ---
 mkdir -p ~/.ssh
+mkdir -p ~/.aws
 chmod 700 ~/.ssh
+
 ```
+
+---
+
+### 2. Configure AWS SSO Profiles (`~/.aws/config`)
+
+Populate `~/.aws/config` to establish isolated session boundaries for Cloudera and Personal AWS accounts, after adjusting `sso_account_id` for each profile:
+
+```ini
+# ==============================================================================
+# CLOUDERA WORK ENVIRONMENT
+# ==============================================================================
+[sso-session cloudera-sso]
+sso_start_url = [https://d-lllllllll.awsapps.com/start#/](https://d-lllllllll.awsapps.com/start#/)
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile login]
+sso_session = cloudera-sso
+sso_account_id = xxxxxxxx
+sso_role_name = cldr_poweruser
+region = us-east-1
+
+[profile sso-sandbox]
+sso_session = cloudera-sso
+sso_account_id = yyyyyyyyyy
+sso_role_name = cldr_poweruser
+region = us-east-1
+
+[profile marketing-emea1]
+sso_session = cloudera-sso
+sso_account_id = 9999999999999
+sso_role_name = cldr_poweruser
+region = us-east-1
+
+# ==============================================================================
+# PERSONAL ENVIRONMENT
+# ==============================================================================
+[sso-session personal-sso]
+sso_start_url = [https://d-xxxxxxxxxx.awsapps.com/start#/](https://d-xxxxxxxxxx.awsapps.com/start#/)
+sso_region = eu-central-1
+sso_registration_scopes = sso:account:access
+
+[profile personal-admin]
+sso_session = personal-sso
+sso_account_id = zzzzzzzzzzzz
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+# ==============================================================================
+# GLOBAL FALLBACK
+# ==============================================================================
+[default]
+region = eu-central-1
+
+```
+
+Authenticate your personal AWS SSO session:
+
+```bash
+# Log into personal AWS SSO session
+aws sso login --profile personal-admin
+
+# Verify active identity
+aws sts get-caller-identity --profile personal-admin
+
+```
+Authenticate your Cloudera AWS SSO session:
+
+```bash
+# Log into Cloudera AWS SSO session
+aws sso login --profile sso-sandbox
+
+# Verify active identity
+aws sts get-caller-identity --profile sso-sandbox
+
+```
+---
+
+### 3. Generate Machine Ed25519 Key Pairs
+
 Run once per physical machine to generate unique, secure Ed25519 identity keys for AWS and GitHub access:
 
 ```bash
@@ -148,9 +229,12 @@ ssh-keygen -t ed25519 -C "macbook-personal-github" -f ~/.ssh/id_ed25519_personal
 
 # --- Work GitHub Key (Cloudera) ---
 ssh-keygen -t ed25519 -C "macbook-work-github" -f ~/.ssh/id_ed25519_work
+
 ```
 
-### 2. Import Public Keys to AWS
+---
+
+### 4. Import Public Keys to AWS
 
 Import your local public key into your personal AWS account via the CLI:
 
@@ -159,39 +243,63 @@ Import your local public key into your personal AWS account via the CLI:
 aws ec2 import-key-pair \
   --key-name "macbook-personal-key" \
   --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
-  --profile AdministratorAccess-xxxxxx \
+  --profile personal-admin \
   --region eu-central-1
-```
-```bash
+
 # On Ubuntu:
 aws ec2 import-key-pair \
   --key-name "ubuntu-personal-key" \
   --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
-  --profile AdministratorAccess-yyyyyy \
+  --profile personal-admin \
   --region eu-central-1
+
 ```
 
-### 3. Register Public Keys with GitHub
+---
+
+### 5. Register Public Keys with GitHub
 
 Print the public keys and copy/paste them into the corresponding GitHub web interfaces:
 
-#### Personal and Work GitHub (`github.com`)
-1. Output public key content and name the key properly, e.g. MacBook Personal Key:
-   ```bash
-   cat ~/.ssh/id_ed25519_personal.pub
-   ```
-2. Output public key content and name the key properly, e.g. Cloudera MacBook Work Key:
-   ```bash
-   cat ~/.ssh/id_ed25519_work.pub
-   ```
-3. Verify ssh connections:
-   ```bash
-   ssh -T git@github.com
-   ```
-   ```bash
-   ssh -T git@github.infra.cloudera.com
-   ```
-### 4. Configure Local SSH Host Mappings (`~/.ssh/config`)
+#### Personal GitHub (`github.com`)
+
+1. Output public key content:
+```bash
+cat ~/.ssh/id_ed25519_personal.pub
+
+```
+
+
+2. Navigate to **GitHub.com $\rightarrow$ Settings $\rightarrow$ SSH and GPG keys $\rightarrow$ New SSH key**.
+3. Name it descriptively (e.g., `MacBook Personal Key`) and paste the key.
+
+#### Work GitHub (`github.infra.cloudera.com`)
+
+1. Output public key content:
+```bash
+cat ~/.ssh/id_ed25519_work.pub
+
+```
+
+
+2. Navigate to **Cloudera GitHub $\rightarrow$ Settings $\rightarrow$ SSH and GPG keys $\rightarrow$ New SSH key**.
+3. Name it descriptively (e.g., `Cloudera MacBook Work Key`) and paste the key.
+
+#### Verify SSH Connections
+
+```bash
+# Test Personal GitHub Connection
+ssh -T git@github.com
+
+# Test Work GitHub Connection
+ssh -T git@github.infra.cloudera.com
+
+```
+
+---
+
+### 6. Configure Local SSH Host Mappings (`~/.ssh/config`)
+
 Add the following configuration to `~/.ssh/config` to automate key selection and host alias mapping:
 
 ```ssh
@@ -220,21 +328,28 @@ Host mark-hol*
   User ec2-user
   IdentityFile ~/.ssh/sky-hol-aws-key-pair-marketing-emea1-xxx.pem
   IdentitiesOnly yes
+
 ```
-### 5. Set File Permissions & Load Keys to Keychain
+
+---
+
+### 7. Set File Permissions & Load Keys to Keychain
+
+Secure permissions and store key passphrases in the macOS Keychain:
+
 ```bash
-    # Secure SSH directory and config permissions
-    chmod 700 ~/.ssh
-    chmod 600 ~/.ssh/config
-    chmod 600 ~/.ssh/id_ed25519*
+# Secure SSH directory and config permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/config
+chmod 600 ~/.ssh/id_ed25519*
+
+# Add keys to macOS Keychain (run on Mac)
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_personal
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_work
+
 ```
-```bash
-    # Add keys to macOS Keychain (run on Mac)
-    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
-    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
-    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_personal
-    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_work
- ```
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
