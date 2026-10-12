@@ -134,7 +134,7 @@ ssh-keygen -t ed25519 -C "macbook-personal-github" -f ~/.ssh/id_ed25519_personal
 ssh-keygen -t ed25519 -C "macbook-work-github" -f ~/.ssh/id_ed25519_work
 ```
 
-### Import Public Keys to AWS
+### 2. Import Public Keys to AWS
 
 Import your local public key into your personal AWS account via the CLI:
 
@@ -154,6 +154,27 @@ aws ec2 import-key-pair \
   --profile AdministratorAccess-yyyyyy \
   --region eu-central-1
 ```
+
+### 3. Register Public Keys with GitHub
+
+Print the public keys and copy/paste them into the corresponding GitHub web interfaces:
+
+#### Personal and Work GitHub (`github.com`)
+1. Output public key content and name the key properly, e.g. MacBook Personal Key:
+   ```bash
+   cat ~/.ssh/id_ed25519_personal.pub
+   ```
+2. Output public key content and name the key properly, e.g. Cloudera MacBook Work Key:
+   ```bash
+   cat ~/.ssh/id_ed25519_work.pub
+   ```
+3. Verify ssh connections:
+   ```bash
+   ssh -T git@github.com
+   ```
+   ```bash
+   ssh -T git@github.infra.cloudera.com
+   ```
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
