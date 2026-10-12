@@ -124,6 +124,10 @@ Install base developer utilities and create required configuration directories:
 xcode-select --install
 
 /bin/bash -c "$(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh](https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh))"
+
+# Add Homebrew to PATH for the current session (Apple Silicon Mac)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 brew install awscli
 aws --version
 
@@ -199,6 +203,7 @@ aws sso login --profile personal-admin
 aws sts get-caller-identity --profile personal-admin
 
 ```
+
 Authenticate your Cloudera AWS SSO session:
 
 ```bash
@@ -209,6 +214,7 @@ aws sso login --profile sso-sandbox
 aws sts get-caller-identity --profile sso-sandbox
 
 ```
+
 ---
 
 ### 3. Generate Machine Ed25519 Key Pairs
@@ -282,25 +288,14 @@ cat ~/.ssh/id_ed25519_work.pub
 ```
 
 
-2. Navigate to **Cloudera GitHub $\rightarrow$ Settings $\rightarrow$ SSH and GPG keys $\rightarrow$ New SSH key**.
+2. Navigate to **Cloudera Enterprise GitHub $\rightarrow$ Settings $\rightarrow$ SSH and GPG keys $\rightarrow$ New SSH key**.
 3. Name it descriptively (e.g., `Cloudera MacBook Work Key`) and paste the key.
-
-#### Verify SSH Connections
-
-```bash
-# Test Personal GitHub Connection
-ssh -T git@github.com
-
-# Test Work GitHub Connection
-ssh -T git@github.infra.cloudera.com
-
-```
 
 ---
 
 ### 6. Configure Local SSH Host Mappings (`~/.ssh/config`)
 
-Add the following configuration to `~/.ssh/config` to automate key selection and host alias mapping:
+Create and populate `~/.ssh/config` to automate key selection and host alias mapping:
 
 ```ssh
 # Personal GitHub account
@@ -333,9 +328,9 @@ Host mark-hol*
 
 ---
 
-### 7. Set File Permissions & Load Keys to Keychain
+### 7. Set File Permissions, Load Keys, and Verify Connections
 
-Secure permissions and store key passphrases in the macOS Keychain:
+Secure permissions, store key passphrases in the macOS Keychain, and verify host connections:
 
 ```bash
 # Secure SSH directory and config permissions
@@ -348,6 +343,10 @@ ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_personal
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_work
+
+# --- Verify SSH Connections via defined host aliases ---
+ssh -T git@github-personal
+ssh -T git@github-work
 
 ```
 ---
