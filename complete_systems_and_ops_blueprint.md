@@ -140,22 +140,20 @@ Import your local public key into your personal AWS account via the CLI:
 
 ```bash
 # On Mac:
-```bash
 aws ec2 import-key-pair \
   --key-name "macbook-personal-key" \
   --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
   --profile AdministratorAccess-xxxxxx \
   --region eu-central-1
 ```
-# On Ubuntu:
 ```bash
+# On Ubuntu:
 aws ec2 import-key-pair \
   --key-name "ubuntu-personal-key" \
   --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
   --profile AdministratorAccess-yyyyyy \
   --region eu-central-1
 ```
-
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
