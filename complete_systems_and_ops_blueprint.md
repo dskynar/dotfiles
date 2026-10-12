@@ -206,6 +206,20 @@ Host sky-hol*
   IdentityFile ~/.ssh/sky-hol-aws-key-pair-marketing-emea1-xxx.pem
   IdentitiesOnly yes
 ```
+### 5. Set File Permissions & Load Keys to Keychain
+```bash
+    # Secure SSH directory and config permissions
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/config
+    chmod 600 ~/.ssh/id_ed25519*
+```
+```bash
+    # Add keys to macOS Keychain (run on Mac)
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_personal
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519_aws_work
+ ```
 ---
 
 ## ⚡ Step 3: Generic Infrastructure Provisioning (`main.tf`)
