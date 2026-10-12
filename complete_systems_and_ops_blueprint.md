@@ -113,19 +113,25 @@ genedit() {
 
 ---
 
-## 🔐 Step 2: Machine Key Pairs & AWS Setup
+## 🔐 Step 2: Machine Key Pairs - AWS & Github Setup
 
-### Local Machine Key Generation
+### 1. Local Machine Key Generation
 
-Run once per machine to generate unique, secure Ed25519 identity keys:
+Run once per physical machine to generate unique, secure Ed25519 identity keys for AWS and GitHub access:
 
 ```bash
+# --- Personal AWS Key ---
 # On Mac:
 ssh-keygen -t ed25519 -C "macbook-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
 
 # On Ubuntu:
 ssh-keygen -t ed25519 -C "ubuntu-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
 
+# --- Personal GitHub Key ---
+ssh-keygen -t ed25519 -C "macbook-personal-github" -f ~/.ssh/id_ed25519_personal
+
+# --- Work GitHub Key (Cloudera) ---
+ssh-keygen -t ed25519 -C "macbook-work-github" -f ~/.ssh/id_ed25519_work
 ```
 
 ### Import Public Keys to AWS
@@ -133,12 +139,21 @@ ssh-keygen -t ed25519 -C "ubuntu-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
 Import your local public key into your personal AWS account via the CLI:
 
 ```bash
+# On Mac:
+```bash
 aws ec2 import-key-pair \
   --key-name "macbook-personal-key" \
   --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
-  --profile AdministratorAccess-101260246565 \
+  --profile AdministratorAccess-xxxxxx \
   --region eu-central-1
-
+```
+# On Ubuntu:
+```bash
+aws ec2 import-key-pair \
+  --key-name "ubuntu-personal-key" \
+  --public-key-material fileb://~/.ssh/id_ed25519_aws_personal.pub \
+  --profile AdministratorAccess-yyyyyy \
+  --region eu-central-1
 ```
 
 ---
