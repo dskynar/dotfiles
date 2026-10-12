@@ -115,12 +115,26 @@ genedit() {
 
 ## 🔐 Step 2: Machine Key Pairs - AWS & Github Setup
 
-### 1. Local Machine Key Generation
-
-Run once per physical machine to generate unique, secure Ed25519 identity keys for AWS and GitHub access:
+### 1. Initial setup and Local Machine Key Generation
 
 ```bash
+# --- Install git, ssh, brew, AWS CLI v2 etc ****
+xcode-select --install
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install awscli
+aws --version
+
+# --- log into your AWS SSO session and verify---
+aws sso login --profile AdministratorAccess-xxxxxx
+aws sts get-caller-identity --profile AdministratorAccess-xxxxxx
+# --- Create ssh directory ---
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+```
+Run once per physical machine to generate unique, secure Ed25519 identity keys for AWS and GitHub access:
 # --- Personal AWS Key ---
+```bash
 # On Mac:
 ssh-keygen -t ed25519 -C "macbook-personal-aws" -f ~/.ssh/id_ed25519_aws_personal
 ssh-keygen -t ed25519 -C "macbook-cloudera-aws" -f ~/.ssh/id_ed25519_aws_work
